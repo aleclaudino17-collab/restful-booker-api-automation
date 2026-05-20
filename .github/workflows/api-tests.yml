@@ -1,0 +1,57 @@
+name: API Automation Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Executa todos os dias às 06:00 UTC (pipeline de regressão)
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    # Permite execução manual via GitHub UI
+
+jobs:
+  api-tests:
+    name: Restful Booker API Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run API Tests
+        run: |
+          pytest tests/             -v             --html=reports/report-${{ matrix.python-version }}.html             --self-contained-html             --tb=short             --color=yes
+        continue-on-error: true
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-python-${{ matrix.python-version }}
+          path: reports/report-${{ matrix.python-version }}.html
+          retention-days: 30
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-python-${{ matrix.python-version }}
+          path: |
+            reports/
+          retention-days: 7
