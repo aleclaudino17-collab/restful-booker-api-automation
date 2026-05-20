@@ -293,4 +293,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ---
 
-> 💡 **Dica para Portfólio:** Este projeto demonstra competências em automação de API, validação de contrato, design de testes, CI/CD e boas práticas de engenharia de software. Ideal para posições de QA Engineer, SDET e Test Automation Engineer.
+> 💡Este projeto demonstra competências em automação de API, validação de contrato, design de testes, CI/CD e boas práticas de engenharia de software. Ideal para posições de QA Engineer, SDET e Test Automation Engineer.
